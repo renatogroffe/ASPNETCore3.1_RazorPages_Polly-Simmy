@@ -47,20 +47,11 @@ namespace SiteConsumoAPIContagem
                 .HandleResult<HttpResponseMessage>(r => !r.IsSuccessStatusCode)
                 .RetryAsync(3, onRetry: (message, retryCount) =>
                 {
-                    var backColor = Console.BackgroundColor;
-                    Console.BackgroundColor = ConsoleColor.Yellow;
-
-                    var foreColor = Console.ForegroundColor;
-                    Console.ForegroundColor = ConsoleColor.Black;
-
                     Console.Out.WriteLine($"Content: {message.Result.Content.ReadAsStringAsync().Result}");
                     Console.Out.WriteLine($"ReasonPhrase: {message.Result.ReasonPhrase}");
                     string msg = $"Retentativa: {retryCount}";
                     Console.Out.WriteLineAsync(msg);
                     LogFileHelper.WriteMessage(msg);
-
-                    Console.BackgroundColor = backColor;
-                    Console.ForegroundColor = foreColor;
                 });
 
             // Criação de um PolicyWrap agrupando as 2 Policies
